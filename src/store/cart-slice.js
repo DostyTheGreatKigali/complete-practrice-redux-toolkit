@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { uiActions } from './ui-slice';
 
 const cartSlice = createSlice({
     name: 'auth',
@@ -50,10 +51,60 @@ const cartSlice = createSlice({
     }
 });
 
-// const sendCart = (cart) => {
-//     return (dispatch)
-// }
+// ABOUT TO CALL ASYNCHRONOUS FUNCTION IN REDUX 
+// DATA REQUESTS TO BE MADE FROM HERE
+
+export const sendCartData = (cart) => {
+    return async (dispatch) => {
+    //  Send state as sending request
+        dispatch(
+            uiActions.showNotification({
+              open: true,
+              message: 'Sending Request',
+              type: 'warning'
+            })
+        );
+
+        const sendRequest = async () => {
+            //  Send state as sending request
+            // dispatch(uiActions.showNotification({
+            //   open: true,
+            //   message: "Sending Request",
+            //   type: 'warning'
+            // }))
+            const res = await fetch('https://practice-redux-toolkit-default-rtdb.firebaseio.com/cartItems.json', {
+              method: 'PUT',
+              body: JSON.stringify(cart)
+             }
+            ); 
+            const data = await res.json(); 
+            // Send state as Request is successful
+            dispatch(
+               uiActions.showNotification({
+                    open: true,
+                    message: "Request sent successfully",
+                    type: 'success'
+            })
+            );
+          };
+
+          // HTTP REQUEST
+            try {
+                await sendRequest()
+            } catch(error) {   
+            // Send state as Error
+                dispatch(
+                    uiActions.showNotification({
+                        open: true,
+                        message: "Sending Request Failed",
+                        type: 'error '
+                })
+            );
+        }
+    }  
+}
 
 export const cartActions = cartSlice.actions;
 
 export default cartSlice;
+

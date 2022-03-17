@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Auth from "./components/Auth";
 import Layout from "./components/Layout";
-// import { uiActions } from "./store/ui-slice";
+import { uiActions } from "./store/ui-slice";
 import Notification from "./components/Notification";
-import { sendCartData } from "./store/cart-slice";
 
 // Variable to prevent Alert on first load
 let isFirstRender = true;
@@ -26,42 +25,38 @@ function App() {
     if(isFirstRender) {
       isFirstRender = false;
       return;
-    } 
+    }
 
-    // const sendRequest = async () => {
-    //   //  Send state as sending request
-    //   // dispatch(uiActions.showNotification({
-    //   //   open: true,
-    //   //   message: "Sending Request",
-    //   //   type: 'warning'
-    //   // }))
-    //   const res = await fetch('https://practice-redux-toolkit-default-rtdb.firebaseio.com/cartItems.json', {
-    //     method: 'PUT',
-    //     body: JSON.stringify(cart)
-    //    }
-    //   ); 
-    //   const data = await res.json(); 
-    //   // Send state as Request is successful
-    //   dispatch(uiActions.showNotification({
-    //     open: true,
-    //     message: "Request sent successfully",
-    //     type: 'success'
-    //   })
-    //   );
-    // };
+    const sendRequest = async () => {
+      //  Send state as sending request
+      dispatch(uiActions.showNotification({
+        open: true,
+        message: "Sending Request",
+        type: 'warning'
+      }))
+      const res = await fetch('https://practice-redux-toolkit-default-rtdb.firebaseio.com/cartItems.json', {
+        method: 'PUT',
+        body: JSON.stringify(cart)
+      }
+      ); 
+      const data = await res.json(); 
+      // Send state as Request is successful
+      dispatch(uiActions.showNotification({
+        open: true,
+        message: "Request sent successfully",
+        type: 'success'
+      }))
+    };
 
-    //  sendRequest().catch(error => {
+     sendRequest().catch(error => {
        // Send state as Error
-      //  dispatch(uiActions.showNotification({
-      //   open: true,
-      //   message: "Sending Request Failed",
-      //   type: 'error '
-      // }))
-    //  });
-
-    dispatch(sendCartData(cart));
-
-  }, [cart, dispatch])
+       dispatch(uiActions.showNotification({
+        open: true,
+        message: "Sending Request Failed",
+        type: 'error '
+      }))
+     });
+  }, [cart])
   // useEffect(() => { 
   //    fetch('https://practice-redux-toolkit-default-rtdb.firebaseio.com/cartItems.json', {
   //      method: 'PUT',
