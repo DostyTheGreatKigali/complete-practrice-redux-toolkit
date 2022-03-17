@@ -50,6 +50,10 @@ const cartSlice = createSlice({
     }
 });
 
+// const sendCart = (cart) => {
+//     return (dispatch)
+// }
+
 export const cartActions = cartSlice.actions;
 
 export default cartSlice;
